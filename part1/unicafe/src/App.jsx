@@ -42,6 +42,18 @@ const App = () => {
     const updatedBad = bad +1
     setBad(updatedBad)
   }
+  if(good===0 && neutral===0 && bad===0){
+    return (
+      <div>
+        <Title title="give feedback" />
+        <Button text="good" onClick={handleGoodClick} />
+        <Button text="neutral" onClick={handleNeutralClick} />
+        <Button text="bad"  onClick={handleBadClick}/>
+        <Title title="statistics" />
+        no feedback given
+      </div>
+    )
+  }
 
   return (
     <div>
