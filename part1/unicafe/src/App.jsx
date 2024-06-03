@@ -18,9 +18,10 @@ const Button = ({text, onClick}) => {
 
 const Statistics = ({text,amount}) => {
   return (
-    <div>
-      <p>{text} {amount}</p>
-    </div>
+      <tr>
+        <td>{text}</td>
+        <td>{amount}</td>
+      </tr>
   )
 }
 
