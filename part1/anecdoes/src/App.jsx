@@ -3,9 +3,12 @@ import { useState } from 'react'
 const Button = (props) => {
   return(
     <div>
-      <h3>{props.value}</h3>
-      <button onClick={props.onClick}>
-        next anecdote
+      <h3>{props.value1} has {props.value2} vote(s)</h3>
+      <button onClick={props.onText2Click}>
+        {props.text2}
+      </button>
+      <button onClick={props.onText1Click}>
+        {props.text1}
       </button>
     </div>
   )
@@ -31,12 +34,21 @@ const App = () => {
     const index = getRandomInt(anecdotes.length)
     setSelected(index)
   }
+
+  const handleVoteClick = () => {
+    const copy = {...votes}
+    copy[selected]+=1
+    setVotes(copy)
+  }
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(
+      Array(anecdotes.length).fill(0)
+  )
 
   return (
     <div>
-      <Button value={anecdotes[selected]} onClick={handleAnecdoteClick} />
+      <Button text1="next anecdote" value1={anecdotes[selected]} onText1Click={handleAnecdoteClick} text2="vote" value2={votes[selected]} onText2Click={handleVoteClick}/>
     </div>
   )
 }
