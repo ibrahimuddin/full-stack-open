@@ -6,6 +6,7 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
+
   const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -17,9 +18,17 @@ const App = () => {
       name:newName,
       id:persons.length+1
     }
-    console.log(newPerson)
-    setPersons(persons.concat(newPerson))
-    setNewName('')
+    let personExists = false
+    persons.forEach(person => {
+      if (person.name.toLowerCase() === newPerson.name.toLowerCase()){
+        personExists = true
+        alert(`${newPerson.name} exists in phonebook!`)
+      }
+    })
+    if (!personExists){
+      setPersons(persons.concat(newPerson))
+      setNewName('')
+    }
   }
 
   return (
