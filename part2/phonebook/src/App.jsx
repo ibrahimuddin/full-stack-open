@@ -23,17 +23,19 @@ const Filter = ({filterName, handleFilterNameChange, filteredPersons}) => {
     <div>
       filter by name : <input value={filterName} onChange={handleFilterNameChange}  />
       <ul>
-      {filteredPersons.map(person => <li key={person.name}>{person.name} : {person.number}</li>)}
+      {filteredPersons.map(person => <li key={person.name}>()
+        {person.name} : {person.number}
+        </li>)}
       </ul>
     </div>
   )
 }
 
-const Persons = ({persons}) => {
+const Persons = ({persons, deleteEntry}) => {
   return (
     <div>
       <ul>
-        {persons.map(person => <li key={person.name}>{person.name} : {person.number}</li>)}
+        {persons.map(person => <li key={person.name}>{person.name} : {person.number}  <button onClick={() => deleteEntry(person.id)}>Delete</button></li>)}
       </ul>
     </div>
   )
@@ -54,6 +56,20 @@ const App = () => {
         setPersons(response)
       })
   },[])
+
+  const deleteEntry = (id) => {
+    axios
+    .delete(`http://localhost:3001/persons/${id}`)
+    .then(response => {
+      setPersons(persons.filter(person => person.id!==id))
+    })
+    .catch(error => {
+      alert(
+        `the name ${persons.id} was already deleted from the server`
+      )
+    })
+
+  }
 
 
 
@@ -116,7 +132,7 @@ const App = () => {
       />
       
       <h2>Numbers</h2>
-      <Persons persons={persons} />
+      <Persons persons={persons} deleteEntry={deleteEntry} />
     </div>
   )
 }
