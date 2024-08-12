@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import numberService from './services/numbers'
 
 const PersonForm = ({addEntry, newName, newNumber, handleNameChange, handleNumberChange}) => {
   return(
@@ -47,13 +48,14 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    numberService
+      .getAll()
       .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
+        setPersons(response)
       })
   },[])
+
+
 
 
   const handleNameChange = (event) => {
@@ -73,6 +75,11 @@ const App = () => {
       number:newNumber,
       id:persons.length+1
     }
+    numberService
+    .create(newPerson)
+    .then(response =>{
+      console.log(response)
+    })
     let personExists = false
     persons.forEach(person => {
       if (person.name.toLowerCase() === newPerson.name.toLowerCase()){
