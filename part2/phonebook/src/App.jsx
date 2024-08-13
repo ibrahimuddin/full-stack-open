@@ -58,16 +58,18 @@ const App = () => {
   },[])
 
   const deleteEntry = (id) => {
-    numberService
-    .deleteEntry(id)
-    .then(response => {
-      setPersons(persons.filter(person => person.id!==id))
-    })
-    .catch(error => {
-      alert(
-        `the name ${persons.id} was already deleted from the server`
-      )
-    })
+    if(window.confirm("Do you wish to do so?")){
+      numberService
+      .deleteEntry(id)
+      .then(response => {
+        setPersons(persons.filter(person => person.id!==id))
+      })
+      .catch(error => {
+        alert(
+          `the name ${persons.id} was already deleted from the server`
+        )
+      })
+    }
   }
 
 
