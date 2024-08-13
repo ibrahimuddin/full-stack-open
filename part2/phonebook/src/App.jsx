@@ -87,24 +87,29 @@ const App = () => {
 
   const addEntry = (event) => {
     event.preventDefault()
+
+
+    console.log(newName in persons)
     const newPerson = {
       name:newName,
       number:newNumber,
       id:(persons.length+1).toString()
     }
-    numberService
-    .create(newPerson)
-    .then(response =>{
-      console.log(response)
-    })
+
     let personExists = false
     persons.forEach(person => {
       if (person.name.toLowerCase() === newPerson.name.toLowerCase()){
         personExists = true
         alert(`${newPerson.name} exists in phonebook!`)
+        //here i should call the axios.update method
       }
     })
     if (!personExists){
+      numberService
+      .create(newPerson)
+      .then(response =>{
+        console.log(response)
+      })
       setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')
