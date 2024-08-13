@@ -58,8 +58,8 @@ const App = () => {
   },[])
 
   const deleteEntry = (id) => {
-    axios
-    .delete(`http://localhost:3001/persons/${id}`)
+    numberService
+    .deleteEntry(id)
     .then(response => {
       setPersons(persons.filter(person => person.id!==id))
     })
@@ -68,7 +68,6 @@ const App = () => {
         `the name ${persons.id} was already deleted from the server`
       )
     })
-
   }
 
 
@@ -89,7 +88,7 @@ const App = () => {
     const newPerson = {
       name:newName,
       number:newNumber,
-      id:persons.length+1
+      id:(persons.length+1).toString()
     }
     numberService
     .create(newPerson)
