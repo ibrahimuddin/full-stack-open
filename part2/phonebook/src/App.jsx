@@ -84,15 +84,16 @@ const App = () => {
   }
 
   const updateNumber = (id,newNumber) => {
-    const url = `http://localhost:3001/persons/${id}`
     const person = persons.find(p => p.id===id)
-    const updatedPerson = {...person, number:newNumber}
+    if(window.confirm(`${person.name} is already added to the phonebook, replace the old number with a new one?`)){
+      const updatedPerson = {...person, number:newNumber}
 
-    numberService.
-    updateEntry(id,updatedPerson)
-    .then(response=>{
-      setPersons(persons.map(p=> p.id!==id ? p : response))
-    })
+      numberService.
+      updateEntry(id,updatedPerson)
+      .then(response=>{
+        setPersons(persons.map(p=> p.id!==id ? p : response))
+      })
+    } 
   }
 
   const addEntry = (event) => {
