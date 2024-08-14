@@ -73,8 +73,6 @@ const App = () => {
   }
 
 
-
-
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -85,23 +83,35 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
+  const updateNumber = (id,newNumber) => {
+    const url = `http://localhost:3001/persons/${id}`
+    const person = persons.find(p => p.id===id)
+    const updatedPerson = {...person, number:newNumber}
+
+    numberService.
+    updateEntry(id,updatedPerson)
+    .then(response=>{
+      setPersons(persons.map(p=> p.id!==id ? p : response))
+    })
+  }
+
   const addEntry = (event) => {
     event.preventDefault()
-
 
     console.log(newName in persons)
     const newPerson = {
       name:newName,
       number:newNumber,
-      id:(persons.length+1).toString()
+      id: Date.now().toString()
     }
 
     let personExists = false
     persons.forEach(person => {
       if (person.name.toLowerCase() === newPerson.name.toLowerCase()){
         personExists = true
-        alert(`${newPerson.name} exists in phonebook!`)
-        //here i should call the axios.update method
+        updateNumber(person.id,newNumber)
+        setNewName('')
+        setNewNumber('')
       }
     })
     if (!personExists){
