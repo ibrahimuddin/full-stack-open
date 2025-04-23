@@ -1,6 +1,31 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import numberService from './services/numbers'
+import './index.css'
+
+const SuccessNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='error'>
+      <p>{message}</p>
+    </div>
+  )
+}
 
 const PersonForm = ({addEntry, newName, newNumber, handleNameChange, handleNumberChange}) => {
   return(
@@ -23,7 +48,7 @@ const Filter = ({filterName, handleFilterNameChange, filteredPersons}) => {
     <div>
       filter by name : <input value={filterName} onChange={handleFilterNameChange}  />
       <ul>
-      {filteredPersons.map(person => <li key={person.name}>()
+      {filteredPersons.map(person => <li key={person.name}>
         {person.name} : {person.number}
         </li>)}
       </ul>
@@ -47,9 +72,11 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
 
   useEffect(() => {
-    console.log('effect')
     numberService
       .getAll()
       .then(response => {
@@ -99,7 +126,6 @@ const App = () => {
   const addEntry = (event) => {
     event.preventDefault()
 
-    console.log(newName in persons)
     const newPerson = {
       name:newName,
       number:newNumber,
@@ -120,20 +146,37 @@ const App = () => {
       .create(newPerson)
       .then(response =>{
         console.log(response)
+        setSuccessMessage("Success!")
+        setPersons(persons.concat(newPerson))
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 5000);
       })
-      setPersons(persons.concat(newPerson))
+        .catch(error => {
+          console.log(error)
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage("");
+          }, 5000);
+      })
       setNewName('')
       setNewNumber('')
+      setErrorMessage('')
     }
   }
 
   const searchName = () => {
     return persons.filter(person => person.name.toLowerCase()==filterName.toLowerCase())
   }
+  console.log("persons: ", persons)
+  
+
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessNotification message={successMessage} />
+      <ErrorNotification message={errorMessage} />
       <Filter filterName={filterName}
               handleFilterNameChange={handleFilterNameChange}
               filteredPersons={searchName()}
