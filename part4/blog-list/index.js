@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const {PORT, MONGODB_URI} = require('./utils/config')
 
 const app = express()
 
@@ -12,8 +13,7 @@ const blogSchema = mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema)
 
-const mongoUrl = 'mongodb+srv://fullstack:1968@cluster0.f9xp1.mongodb.net/phoneBookApp?retryWrites=true&w=majority&appName=Cluster0'
-mongoose.connect(mongoUrl)
+mongoose.connect(MONGODB_URI)
 
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {
@@ -39,7 +39,6 @@ app.post('/api/blogs', (request, response) => {
   })
 })
 
-const PORT = 3003
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
