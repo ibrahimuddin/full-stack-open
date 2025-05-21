@@ -58,17 +58,18 @@ test('create a new blog', async () => {
         url: "Test POST URL",
         likes: 1,
     }
-    const newBlogObject = new Blog(newBlog)
-    await newBlogObject.save()
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
 
     const response = await api.get('/api/blogs')
+
     assert.strictEqual(response.body.length, 3)
     const titles = response.body.map(b => b.title )
     assert.strictEqual(titles.includes('Test POST'), true)
     const authors = response.body.map(b => b.author )
     assert.strictEqual(authors.includes('Test POST Author'), true)
     const urls = response.body.map(b => b.url )
-    assert.strictEqual(urls.includes('Test POST URL'), true)
-
-    
+    assert.strictEqual(urls.includes('Test POST URL'), true)    
 })
