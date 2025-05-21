@@ -101,3 +101,16 @@ test('title or URL missing from data', async () => {
         .send(blogWithNoURL)
         .expect(400)
 })
+
+test('delete first blog', async () => {
+    const totalBlogsBeginning = await api.get('/api/blogs')
+    const blogToDelete = totalBlogsBeginning.body[0]
+
+    await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+    
+    const totalBlogsEnd = await api.get('/api/blogs')
+    
+    assert.strictEqual(totalBlogsEnd.body.length + 1, totalBlogsBeginning.body.length)
+}) 
