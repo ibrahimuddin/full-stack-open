@@ -41,3 +41,12 @@ test('blogs of list is 2', async () => {
 
     assert.strictEqual(response.body.length,2)
 })
+
+test('id property is id and not _id', async () => {
+    const response = await api.get('/api/blogs')
+
+    for (const blog of response.body) {
+        assert.strictEqual(typeof blog.id, 'string')
+        assert.strictEqual(typeof blog._id, 'undefined')
+    }
+} )
