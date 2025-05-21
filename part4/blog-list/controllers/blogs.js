@@ -8,7 +8,13 @@ blogsRouter.get('/', async (request, response) => {
   
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  const blog = new Blog({
+  if (body['title'] === undefined) {
+    response.status(400).json()
+  } else if (body['url'] === undefined) {
+    response.status(400).json()
+  }
+  else {
+    const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
@@ -17,6 +23,8 @@ blogsRouter.post('/', async (request, response) => {
 
     const newBlog = await blog.save()
     response.status(201).json(newBlog)
+  }
+
 })
 
 module.exports = blogsRouter

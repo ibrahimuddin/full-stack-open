@@ -78,5 +78,26 @@ test('like property missing defaults to 0', async () => {
     const likes = response.body.map(b => b.likes)
 
     assert.strictEqual(likes[response.body.length-1], 0)
+})
 
+test('title or URL missing from data', async () => {
+    const blogWithNoTitle = {
+        author: "Test NoTitle",
+        url: "Test NoTitle",
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blogWithNoTitle)
+        .expect(400)
+    
+    const blogWithNoURL = {
+        title: "Test NOURL",
+        author: "Test NOURL",
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blogWithNoURL)
+        .expect(400)
 })
