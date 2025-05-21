@@ -49,4 +49,26 @@ test('id property is id and not _id', async () => {
         assert.strictEqual(typeof blog.id, 'string')
         assert.strictEqual(typeof blog._id, 'undefined')
     }
-} )
+})
+
+test('create a new blog', async () => {
+    const newBlog = {
+        title: "Test POST",
+        author: "Test POST Author",
+        url: "Test POST URL",
+        likes: 1,
+    }
+    const newBlogObject = new Blog(newBlog)
+    await newBlogObject.save()
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body.length, 3)
+    const titles = response.body.map(b => b.title )
+    assert.strictEqual(titles.includes('Test POST'), true)
+    const authors = response.body.map(b => b.author )
+    assert.strictEqual(authors.includes('Test POST Author'), true)
+    const urls = response.body.map(b => b.url )
+    assert.strictEqual(urls.includes('Test POST URL'), true)
+
+    
+})
