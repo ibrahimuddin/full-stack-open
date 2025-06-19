@@ -114,3 +114,33 @@ test('delete first blog', async () => {
     
     assert.strictEqual(totalBlogsEnd.body.length + 1, totalBlogsBeginning.body.length)
 }) 
+
+test('update like count', async () => {
+    const newBlog = {
+        title: "Test UpdateLike",
+        author: "Test UpdateLike",
+        url: "Test UpdateLike",
+        likes:5
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+    
+    const response = await api.get('/api/blogs')
+    const likesBeforeUpdate = response.body.map(b => b.likes)
+
+    assert.strictEqual(likesBeforeUpdate[response.body.length - 1], 5)
+
+    lastBlogId = (response.body[response.body.length - 1]).id
+
+    await api
+        .put(`/api/blogs/${lastBlogId}`)
+        .send({ "likes": 10 })
+        .expect(200)
+    
+    const responseAfter = await api.get('/api/blogs')
+    const likesAfterUpdate = responseAfter.body.map(b => b.likes)
+
+    assert.strictEqual(likesAfterUpdate[response.body.length-1],10)
+} )
