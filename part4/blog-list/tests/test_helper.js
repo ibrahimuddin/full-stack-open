@@ -15,4 +15,17 @@ const initialBlogs = [
     }
 ]
 
-module.exports = {initialBlogs}
+const initialUsers = [
+    {
+        username: "Test Username 1",
+        password: "Test Password 1",
+        name: "Test name 1"
+    },
+    {
+        username: "Test Username 2",
+        password: "Test Password 2",
+        name: "Test name 2"
+    }
+]
+
+module.exports = {initialBlogs, initialUsers}
