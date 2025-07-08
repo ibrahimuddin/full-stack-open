@@ -1,5 +1,18 @@
 const Blog = require('../models/blog')
 
+const initialUsers = [
+    {
+        username: "Test Username 1",
+        password: "Test Password 1",
+        name: "Test name 1"
+    },
+    {
+        username: "Test Username 2",
+        password: "Test Password 2",
+        name: "Test name 2"
+    }
+]
+
 const initialBlogs = [
     {
         title: "Test title 1",
@@ -12,19 +25,6 @@ const initialBlogs = [
         author: "Test author 2",
         url: "Test url 2",
         likes: 1,
-    }
-]
-
-const initialUsers = [
-    {
-        username: "Test Username 1",
-        password: "Test Password 1",
-        name: "Test name 1"
-    },
-    {
-        username: "Test Username 2",
-        password: "Test Password 2",
-        name: "Test name 2"
     }
 ]
 
