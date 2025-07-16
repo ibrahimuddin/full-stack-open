@@ -3,6 +3,9 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import Alert from 'react-bootstrap/Alert';
+
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -12,6 +15,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   
 
   useEffect(() => {
@@ -39,8 +45,13 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch(exception) {
+      setError('')
+    } catch (exception) {
+      setError("Wrong Credentials")
       console.log("wrong credentials")
+      setTimeout(() => {
+        setError('')
+      }, 5000)
     }
   }
 
@@ -48,6 +59,7 @@ const App = () => {
     event.preventDefault()
     window.localStorage.removeItem('loggedBlogUser')
     setUser(null)
+    setError('')
   }
 
   const handleBlogCreation = async (event) => {
@@ -58,6 +70,10 @@ const App = () => {
     setUrl('')
 
     setBlogs(blogs.concat(createdBlog))
+    setSuccess(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+    setTimeout(() => {
+      setSuccess('')
+    },5000)
   }
 
   const loginForm = () => (
@@ -131,6 +147,8 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      {error ? <p>{error}</p> : null}
+      {success ? <p>{success}</p> : null}
       {user === null && loginForm()}
       {user !== null && displayUserBlogs()}
       {user !==null && blogs.map(blog =>
