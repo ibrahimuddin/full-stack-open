@@ -1,24 +1,22 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import BlogCreationForm from './components/BlogCreationForm'
+import Togglable from './components/Togglable'
+
+
 import blogService from './services/blogs'
 import loginService from './services/login'
-
-import Alert from 'react-bootstrap/Alert';
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  
+
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -34,17 +32,14 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (loginObject) => {
     try {
-      const user = await loginService.login({ username, password })
+      const user = await loginService.login(loginObject)
       window.localStorage.setItem(
         'loggedBlogUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       setError('')
     } catch (exception) {
       setError("Wrong Credentials")
@@ -62,12 +57,8 @@ const App = () => {
     setError('')
   }
 
-  const handleBlogCreation = async (event) => {
-    event.preventDefault()
-    const createdBlog = await blogService.create({ title, author, url })
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+  const createBlog = async (blogObject) => {
+    const createdBlog = await blogService.create(blogObject)
 
     setBlogs(blogs.concat(createdBlog))
     setSuccess(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
@@ -77,61 +68,19 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        Username:
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
+    <Togglable buttonLabel="Login">
+        <LoginForm
+          handleLogin={handleLogin}
         />
-      </div>
-      <div>
-        Password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    </Togglable>
   )
 
   const createBlogForm = () => (
-    <form onSubmit={handleBlogCreation}>
-      <h2>CREATE NEW BLOG</h2>
-      <div>
-        Title:
-        <input
-          type="text"
-          value={title}
-          name="title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        Author:
-        <input
-          type="text"
-          value={author}
-          name="author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        URL:
-        <input
-          type="text"
-          value={url}
-          name="URL"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <Togglable buttonLabel="New Blog">
+      <BlogCreationForm
+        createBlog={createBlog}
+      />
+      </Togglable>
   )
 
   const displayUserBlogs = () => (
@@ -159,6 +108,5 @@ const App = () => {
     </div>
   )
 }
-//asd
 
 export default App
