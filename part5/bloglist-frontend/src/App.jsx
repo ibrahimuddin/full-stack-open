@@ -65,6 +65,19 @@ const App = () => {
     },5000)
   }
 
+  const updateBlog = async (blogObject,blogId) => {
+    const updatedBlog = await blogService.update(blogObject, blogId)
+
+    setBlogs(prevBlogs =>
+          prevBlogs.map(blog => (blog.id === updatedBlog.id ? updatedBlog : blog))
+    );
+    
+    setSuccess(`the blog ${updatedBlog.title} has been updated`)
+    setTimeout(() => {
+      setSuccess('')
+    },5000)
+  }
+
   const loginForm = () => (
     <Togglable buttonLabel="Login">
         <LoginForm
@@ -99,7 +112,7 @@ const App = () => {
       {user === null && loginForm()}
       {user !== null && displayUserBlogs()}
       {user !==null && blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
        {user !== null && createBlogForm()}
 
