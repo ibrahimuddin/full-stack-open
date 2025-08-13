@@ -16,7 +16,9 @@ const Blog = ({ blog, updateBlog }) => {
     const title = blog.title
     const url = blog.url
     const likes = blog.likes + 1
-    updateBlog({author,title,url,likes}, blog.id)
+    const user = blog.user
+    console.log("user", user)
+    updateBlog({author,title,url,likes,user}, blog.id)
   }
 
   const blogStyle = {

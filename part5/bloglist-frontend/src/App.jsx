@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -67,10 +67,12 @@ const App = () => {
 
   const updateBlog = async (blogObject,blogId) => {
     const updatedBlog = await blogService.update(blogObject, blogId)
-
+    console.log(updatedBlog)
     setBlogs(prevBlogs =>
           prevBlogs.map(blog => (blog.id === updatedBlog.id ? updatedBlog : blog))
     );
+
+    // {blogs.map(blog => console.log(blog))}
     
     setSuccess(`the blog ${updatedBlog.title} has been updated`)
     setTimeout(() => {
